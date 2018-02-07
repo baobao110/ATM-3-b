@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	
+	<properties resource="1.properties"/>
+	<typeAliases>
+		<package name="BankCard"/>
+	</typeAliases>
+  
+</configuration>
+
+<!-- 原本数据库链接的配置都是在这里也就是mybaties配置相关的连接信息,但是这里mybaties和spring结合所以相关的信息都放在了spring文件中配置这里只需要配置数据信息的加载文件路径 -->

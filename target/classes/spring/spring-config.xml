@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
+        
+  	<context:component-scan base-package="com"/>      
+  	 <!-- 这里是扫描包,这里终于知道给包命名时为什么要用一串,如这里就是扫描所有的com开始的包-->
+	 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+   		 <property name="locations" value="classpath:1.properties"/>
+	</bean>
+	<!--这里只需要改动1.properties也就是数据库连接信息文件在resources下面的路径  -->
+	
+	 <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="username" value="${user}" />
+		<property name="password" value="${password}" />
+		<property name="url" value="${url}" />
+		<property name="driverClassName" value="${Driver}" />
+	</bean>
+	<!-- 这里需要改动的是value值,对应的是1.properties中的信息 -->
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  <property name="dataSource" ref="dataSource" />
+	  <property name="mapperLocations" value="classpath*:mapper/**/*.xml" />
+	  <property name="configLocation" value="classpath:mybaties-config.xml" />
+	</bean>
+	<!-- 这里的ref对应的是前面数据源的id,后面的 "mapperLocations"的路径对应的是原来mybaties对数据库操作文件的路径,同样是相对于resources,这里的代表多个文件-->
+	<!--这里需要注意的一点是classpath后面的*代表的意义是扫描所有文件包括jar包,如果不带*代表只扫描文件 -->
+	<!--configLocation 配置的路径是mybaties的xml路径  -->
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  <property name="basePackage" value="com.inter" />
+	 <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	<!--这里唯一需要改动的 "basePackage"对应的值,它对应的是DAO层其实就是对数据库进行操作的层其实就是mybaties的相关的java文件 -->
+	
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    	<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<!-- 这里的ref同样是数据源的id,同时txManager是结合后面的事务处理作用的 -->
+	
+</beans>
+

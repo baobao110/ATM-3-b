@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.inter.AccountDAO">
+  	<insert id="add">
+  	insert account(number,money,type,createtime,description,username) values(#{number},#{money},#{type},NOW(),#{description},#{username})
+  	</insert>
+  	<select id="List" resultType="com.AccountFlow.Account">
+  		select * from account where number=#{number} order by createtime desc limit #{currentNumber},#{move}
+  	</select>
+  	<!--这里是返回所有信息，这里 currentNumber是当前页的起始记录，move指该页显示多少的记录,特别注意这里的limit用法限制显示的记录数目  -->
+  	<select id="totalNumber" resultType="int">
+  		select count(*) from account where number=#{number}
+  	</select>
+  	<!-- 获取所有的流水记录数目 -->
+  	
+  	<select id="ten" resultType="com.AccountFlow.Account">
+  		select * from account where username=#{username} order by createtime desc limit 10;
+  	</select>
+  </mapper>

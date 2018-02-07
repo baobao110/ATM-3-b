@@ -1,0 +1,41 @@
+<configuration debug="true" scan="true" scanPeriod="30 seconds">
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <file>/var/log/atm/atm.log</file>
+    <append>true</append>
+    <immediateFlush>true</immediateFlush>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="FILE2" class="ch.qos.logback.core.FileAppender">
+    <file>/var/log/atm/atm2.log</file>
+    <append>true</append>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] [%-5level] [%logger-%M:%L] - %msg%n</pattern>
+    </encoder>
+  </appender>
+  
+  <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="FILE2" />
+    <queueSize>512</queueSize>
+    <discardingThreshold>0</discardingThreshold>
+  </appender>
+  
+  <logger name="com" level="debug" additivity="false"><!--logger可以有多个,appender可以有多个  但是 root只能有一个    -->
+  	<appender-ref ref="STDOUT" />
+  	<appender-ref ref="ASYNC" />
+  </logger>
+
+  <root level="debug">		<!--注意这里的level 一般开发时用debug 但是真正上线用INF   -->
+    <appender-ref ref="ASYNC" />
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

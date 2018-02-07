@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.inter.CardDAO">
+	<delete id="delete">
+		delete from card where number=#{number}
+	</delete>
+
+	<select id="GetCad" resultType="com.BankCard.Card"> 
+		select * from card where number=#{number}
+	</select>
+	<select id="GetCard" resultType="com.BankCard.Card"> 
+		select * from card where number=#{number} and password=#{password}
+	</select>
+	<update id="modifyPassword">
+		update card set password=#{newPassword} where number=#{number}
+	</update>
+	<update id="modifyMoney">
+		update card set money=#{money} where number=#{number}
+	</update>
+	<insert id="open" useGeneratedKeys="true" keyProperty="id">
+		insert card (number,password,money,createtime,modifytime,username) value (#{number},#{password},#{money},now(),now(),#{username})
+	</insert>
+	<select id="List" resultType="com.BankCard.Card">
+  	select * from card where  number=#{number} order by createtime desc limit #{currentNumber},#{move}
+  </select>
+  <!-- 按创建时间降序的方式展示流水 -->
+  <select id="list" resultType="com.BankCard.Card">
+  	select * from card where username=#{username} limit #{currentNumber},#{move}
+  </select>
+  <select id="totalNumber" resultType="int">
+  		select count(*) from card  where number=#{number}
+  	</select>
+  	<select id="total" resultType="int">
+  		select count(*) from card  where username=#{username}
+  	</select>
+  	
+  	<select id="flow" resultType="com.BankCard.Card">
+  		select * from card  where username=#{username}
+  	</select>
+</mapper>
+

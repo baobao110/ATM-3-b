@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        
+        <context:component-scan base-package="com.control"/>  <!--这里需要配置的就是control层的路径 -->
+        
+        <!--这里只需要改变  prefix和suffix的值它们其实就是跳转路径,因为control层会返回一个字符串,比如返回list到这里就会跳转到/WEB-INF/pag/list.jsp-->
+       <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+	    <property name="viewResolvers">
+	        <list>
+	            <bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+	            <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	                <property name="prefix" value="/WEB-INF/pag/"/>
+	                <property name="suffix" value=".jsp"/>
+	            </bean>
+	        </list>
+	    </property>
+	   </bean>
+	 
+	 	<bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+   		 <!-- one of the properties available; the maximum file size in bytes -->
+    		<property name="maxUploadSize" value="600000"/>
+
+			</bean>
+			<!-- 这里的multipartResolver的bean是用于文件上传的配置,这里都是照抄文档,只需要改变value就是文件上传的最大空间 -->
+	   		<mvc:annotation-driven>
+	     <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+   		</mvc:message-converters>
+   		</mvc:annotation-driven>
+
+</beans>
